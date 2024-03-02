@@ -10,6 +10,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @GetMapping("index")
+    @RequestMapping("/")
     public String home(){
         return "index";
     }
@@ -54,7 +55,7 @@ public class AuthController {
             return "register";
         }
         userService.saveUser(user);
-        return "redirect:/register?success";
+        return "redirect:/login?success";
     }
 
     @GetMapping("/users")

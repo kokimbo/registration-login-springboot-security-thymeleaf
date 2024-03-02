@@ -20,7 +20,8 @@ public class User
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "cliente_seq")
+    @SequenceGenerator(name = "cliente_seq", sequenceName = "SEQ_CLIENTE_ID", allocationSize = 1)
     private Long id;
 
     @Column(nullable=false)
