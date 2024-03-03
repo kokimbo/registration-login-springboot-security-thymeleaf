@@ -28,6 +28,16 @@ public class AuthController {
         return "index";
     }
 
+    @GetMapping("/error")
+    public String errorHandling() {
+        return "redirect:/login";
+    }
+
+//    @GetMapping("/otra-pagina-de-error")
+//    public String errorDelError() {
+//        return "opcionesAdmin";
+//    }
+
     @GetMapping("/login")
     public String loginForm() {
         return "login";
@@ -42,7 +52,7 @@ public class AuthController {
     }
 
     // handler method to handle register user form submit request
-    @PostMapping("/register/save")
+    @PostMapping("/register/saveUser")
     public String registration(@Valid @ModelAttribute("user") UserDto user,
                                BindingResult result,
                                Model model){

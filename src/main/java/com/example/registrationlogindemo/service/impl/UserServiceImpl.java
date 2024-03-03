@@ -57,6 +57,18 @@ public class UserServiceImpl implements UserService {
                 .collect(Collectors.toList());
     }
 
+    @Override
+    public boolean remove(Long id) {
+        userRepository.deleteById(id);
+        return true;
+    }
+
+    @Override
+    public boolean update(User user) {
+        userRepository.save(user);
+        return false;
+    }
+
     private UserDto convertEntityToDto(User user){
         UserDto userDto = new UserDto();
         String[] name = user.getName().split(" ");
