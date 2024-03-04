@@ -23,7 +23,7 @@
                         <a class="btn btn-outline-primary me-2" aria-current="page" th:href="@{/logout}">Cerrar Sesion</a>
                     </li>
                     <li class="nav-item">
-                        <a class="btn btn-outline-danger me-2" aria-current="page"  th:href="@{/remove/{id}(id=${#strings.arraySplit(#authentication.name, '&')[1]})}">Borrar cuenta</a>
+                        <a class="btn btn-outline-danger me-2" aria-current="page"  th:href="@{/remove/{id}(id=${#authentication.principal.userId})}">Borrar cuenta</a>
                     </li>
                 </ul>
             </div>
@@ -31,9 +31,9 @@
     </nav>
     <div class="container">
         <!--/*@thymesVar id="httpSession" type=""*/-->
-        <h1 th:text="${#strings.arraySplit(#authentication.name, '&')[1]}"></h1>
+        <h1 th:text="${#authentication.principal.userId}"></h1>
         <div class="row">
-            <h1 class="text-center"> Bienvenido al panel de administracion de Forocoches <span th:text="${#strings.arraySplit(#authentication.name, '&')[0]}"></span></h1>
+            <h1 class="text-center"> Bienvenido al panel de administracion de Forocoches <span th:text="${#authentication.principal.username}"></span></h1>
         </div>
 
     </div>

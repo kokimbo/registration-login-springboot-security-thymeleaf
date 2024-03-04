@@ -1,6 +1,7 @@
 package com.example.registrationlogindemo.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.util.List;
@@ -27,16 +28,16 @@ public class Coche {
     private String marca;
 
     @Column(nullable = false)
-    @NotEmpty(message = "El campo alquiler no puede estar vacio")
-    private double alquilerMensual;
+    @NotNull(message = "El campo alquiler no puede estar vacio")
+    private Double alquilerMensual;
 
     @Column(nullable = false)
-    @NotEmpty(message = "El campo kilometros no puede estar vacio")
-    private int kilometros;
+    @NotNull(message = "El campo kilometros no puede estar vacio")
+    private Integer kilometros;
 
     @Column(nullable = false)
-    @NotEmpty(message = "El campo caballos no puede estar vacio")
-    private int caballos;
+    @NotNull(message = "El campo caballos no puede estar vacio")
+    private Integer caballos;
 
     @ManyToOne
     @JoinColumn(name = "USER_ID", referencedColumnName = "ID")

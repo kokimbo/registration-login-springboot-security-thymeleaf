@@ -12,13 +12,13 @@
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container-fluid">
+    <div class="w-100 d-flex justify-content-between">
         <a class="navbar-brand ms-3" href="#">Forocoches</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <div class="collapse navbar-collapse d-flex justify-content-end" id="navbarSupportedContent">
+            <ul class="navbar-nav me-5 mb-2 mb-lg-0">
                 <li class="nav-item">
                     <a class="btn btn-primary mx-3" aria-current="page" th:href="@{/register}">Register</a>
                 </li>
@@ -36,12 +36,15 @@
     <div class="row">
         <h1 class="text-center">Bienvenido a forocoches</h1>
     </div>
+    <div th:if="${param.errorAlquiler}" class="alert alert-danger alert-dismissible fade show" role="alert">
+        <h3 class="fw-bold mb-0">No se ha podido alquilar este coche</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <div class="mt-5 fw-bold" sec:authorize="hasRole('ROLE_USER')">
-        <h1>Hola <span th:text="${#strings.arraySplit(#authentication.name, '&')[0]}"></span></h1>
+        <h1>Hola <span th:text="${#authentication.principal.username}"></span></h1>
     </div>
 
-    <!--/*@thymesVar id="email" type="com.example.registrationlogindemo.security.CustomUserDetails"*/-->
-    <h1 th:if="${#authentication.principal != 'anonymousUser'}" th:text="${#authentication.principal.userId}"></h1>
+<!--    <h1 sec:authorize="isAuthenticated()" th:text="${#authentication.principal.userId}"></h1>-->
 
     <div class="row">
         <h1> Coches en alquiler </h1>
@@ -69,7 +72,7 @@
             <td th:if="${coche.user != null}" th:text="'Alquilado por '+${coche.user.name}"></td>
             <td class="text-center" th:if="${coche.user == null}">
                 <a class="btn btn-outline-success" th:href="@{/login?alquilar=0}" sec:authorize="!isAuthenticated()">Alquilar</a>
-                <a class="btn btn-outline-success" th:href="@{/login}" sec:authorize="hasRole('ROLE_USER')">Alquilar</a>
+                <a class="btn btn-outline-success" th:href="@{/alquilar(id=${#authentication.principal.userId}, idCoche=${coche.getId()})}" sec:authorize="hasRole('ROLE_USER')">Alquilar</a>
             </td>
         </tr>
         </tbody>
@@ -85,25 +88,19 @@
                 <div class="card card-body ">
                     <div class="row">
                         <div class="col-4 d-flex">
-                            <h6 class="text-lighter me-4 mb-3">${detalle.producto.nombre}</h6>
-                            <h6 class="fw-light"> X ${detalle.cantidad}</h6>
+                            <h6 class="text-lighter me-4 mb-3" th:text="'Marca: '+${coche.getMarca()}"></h6>
+                            <h6 class="fw-light" th:text="'Kilometros recorridos: '+${coche.getKilometros()}"></h6>
                         </div>
                         <div class="col-8 d-flex justify-content-end">
-                            <h6 class="fw-light">${detalle.importe}€</h6>
+                            <h6 class="fw-light" th:text="'Alquiler/mes €: '+${coche.getAlquilerMensual()}+'€'"></h6>
                         </div>
                     </div>
 
                     <div class="row">
-                        <p class="card-text col-11 d-inline border-bottom pb-1 ">${detalle.producto.descripcion}</p>
+                        <p class="card-text col-11 d-inline border-bottom pb-1" th:text="'Caballos de potencia: '+${coche.getCaballos()}"></p>
                         <div class="col-1 ">
-
-                                    <a href="deletePedido/${pedido.pedidoID}" class="btn btn-outline-danger ms-5"><i class="fa-solid fa-trash"></i></a>
-
-                                    <a href="deleteDetalle/${detalle.detalleID}" class="btn btn-outline-danger ms-5"><i class="fa-solid fa-trash"></i></a>
-
-
-                        </div>
-
+                            <a sec:authorize="hasRole('ROLE_USER')" th:href="@{/cancelarAlquiler(id=${#authentication.principal.userId}, idCoche=${coche.getId()})}" class="btn btn-outline-danger ms-5"><i class="fa-solid fa-trash"></i></a>
+                        </div>                                   <!--Cambiar el href-->
                     </div>
                 </div>
             </div>
