@@ -27,6 +27,10 @@
                 <h3 class="fw-bold mb-0">¡Te has registrado correctamente!</h3>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
+            <div th:if="${param.alquilar}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                <h4 class="fw-bold mb-0">¡Para alquilar un coche necesitar iniciar sesion!</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
             <div th:if="${param.error}" class="alert alert-danger alert-dismissible fade show" role="alert">
                 <h4 class="fw-bold mb-0">Email o contraseña erroneos</h4>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>

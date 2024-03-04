@@ -27,8 +27,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         User user = userRepository.findByEmail(email);
 
         if (user != null) {
-            return new org.springframework.security.core.userdetails.User(user.getEmail(),
+            return new CustomUserDetails(user.getId(),user.getName()+"&"+user.getId(),
                     user.getPassword(),
+                    user.getEmail(),
                     mapRolesToAuthorities(user.getRoles()));
         }else{
             throw new UsernameNotFoundException("Usuario o contreaseña invalidas.");

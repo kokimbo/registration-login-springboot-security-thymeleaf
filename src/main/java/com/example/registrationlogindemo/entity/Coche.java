@@ -18,23 +18,23 @@ public class Coche {
     @SequenceGenerator(name = "coche_seq", sequenceName = "SEQ_COCHE_ID", allocationSize = 1)
     private Long id;
 
-    @Column
+    @Column(nullable = false)
     @NotEmpty(message = "El campo nombre no puede estar vacio")
     private String nombre;
 
-    @Column
+    @Column(nullable = false)
     @NotEmpty(message = "El campo marca no puede estar vacio")
     private String marca;
 
-    @Column
+    @Column(nullable = false)
     @NotEmpty(message = "El campo alquiler no puede estar vacio")
     private double alquilerMensual;
 
-    @Column
+    @Column(nullable = false)
     @NotEmpty(message = "El campo kilometros no puede estar vacio")
     private int kilometros;
 
-    @Column
+    @Column(nullable = false)
     @NotEmpty(message = "El campo caballos no puede estar vacio")
     private int caballos;
 

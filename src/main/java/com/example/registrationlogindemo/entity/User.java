@@ -13,6 +13,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name="users")
+@EqualsAndHashCode(exclude = "users")
 public class User
 {
 
@@ -34,7 +35,7 @@ public class User
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private List<Coche> coches;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.EAGER, cascade= {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
     @JoinTable(
             name="users_roles",
             joinColumns={@JoinColumn(name="USER_ID", referencedColumnName="ID")},

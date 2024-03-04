@@ -1,9 +1,15 @@
 package com.example.registrationlogindemo.controller;
 
 import com.example.registrationlogindemo.dto.UserDto;
+import com.example.registrationlogindemo.entity.Coche;
 import com.example.registrationlogindemo.entity.User;
+import com.example.registrationlogindemo.security.CustomUserDetails;
+import com.example.registrationlogindemo.service.CocheService;
 import com.example.registrationlogindemo.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,20 +24,38 @@ import java.util.List;
 public class AuthController {
 
     private UserService userService;
+    private CocheService cocheService;
+    private CustomUserDetails userDetails;
 
-    public AuthController(UserService userService) {
+    public AuthController(UserService userService, CocheService cocheService) {
+        this.cocheService = cocheService;
         this.userService = userService;
     }
 
     @RequestMapping("/")
-    public String home(){
+    public String inicio(Model model, HttpSession session){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+
+        // Acceder al nombre de usuario
+        if(!authentication.getPrincipal().toString().equals("anonymousUser")){
+            userDetails = (CustomUserDetails) authentication.getPrincipal();
+        }
+
+        if(userDetails!=null){
+            List<Coche> cochesUsuario = cocheService.getAllByUsuario(userService.findByEmail(userDetails.getEmail()));
+            model.addAttribute("cochesUsuario", cochesUsuario);
+        }
+
+        model.addAttribute("coches", cocheService.getAll());
+
         return "index";
     }
 
-    @GetMapping("/error")
-    public String errorHandling() {
-        return "redirect:/login";
-    }
+//    @GetMapping("/error")
+//    public String errorHandling() {
+//        return "redirect:/login";
+//    }
 
 //    @GetMapping("/otra-pagina-de-error")
 //    public String errorDelError() {
@@ -73,5 +97,10 @@ public class AuthController {
         List<UserDto> users = userService.findAllUsers();
         model.addAttribute("users", users);
         return "users";
+    }
+
+    @GetMapping("/opcionesAdministrador")
+    public String opcionesDeAdmin(){
+        return "opcionesAdmin";
     }
 }

@@ -37,6 +37,8 @@ public class SpringSecurity {
                         authorize.requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/").permitAll()
                                 .requestMatchers("/users").hasRole("ADMIN")
+                                .requestMatchers("/opcionesAdministrador").hasRole("ADMIN")
+                                .requestMatchers("/remove/**").permitAll()
                                 .requestMatchers("/login/**").permitAll()
                 ).formLogin(
                         form -> form
@@ -48,8 +50,8 @@ public class SpringSecurity {
                         logout -> logout
                                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
                                 .permitAll()
-                ).exceptionHandling()
-                .accessDeniedPage("/error");
+                );//exceptionHandling()
+//                .accessDeniedPage("/error");
         return http.build();
     }
 
@@ -60,7 +62,7 @@ public class SpringSecurity {
             protected String determineTargetUrl(HttpServletRequest request, HttpServletResponse response, Authentication authentication) {
                 boolean isAdmin = authentication.getAuthorities().stream()
                         .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
-                return isAdmin ? "/users" : "/";  //La respuesta en el false la tengo que cambiar
+                return isAdmin ? "/opcionesAdministrador" : "/";  //La respuesta en el false la tengo que cambiar, bueno realmente las 2
             }
         };
     }

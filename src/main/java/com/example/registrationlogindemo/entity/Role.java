@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Builder
 @Table(name="roles")
+@EqualsAndHashCode(exclude = "roles")
 public class Role
 {
     @Id
