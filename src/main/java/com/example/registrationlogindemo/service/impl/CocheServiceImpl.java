@@ -21,16 +21,6 @@ public class CocheServiceImpl implements CocheService {
     }
 
     @Override
-    public List<Coche> getAllByUsuario(User user) {
-        return  cocheRepository.findAllByUser(user);
-    }
-
-    @Override
-    public Coche getByUsuario(User user) {
-        return cocheRepository.findCocheByUser(user);
-    }
-
-    @Override
     public Coche getById(Long id) {
         return cocheRepository.findCocheById(id);
     }

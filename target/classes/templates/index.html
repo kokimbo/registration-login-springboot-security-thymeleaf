@@ -28,6 +28,9 @@
                 <li sec:authorize="isAuthenticated()" class="nav-item">
                     <a class="btn btn-danger" aria-current="page" th:href="@{/logout}">Logout</a>
                 </li>
+                <li sec:authorize="isAuthenticated()" class="nav-item">
+                    <a class="btn btn-danger ms-3" aria-current="page" th:href="@{/logout}">Borrar cuenta</a>
+                </li>
             </ul>
         </div>
     </div>

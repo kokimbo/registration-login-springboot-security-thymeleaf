@@ -18,8 +18,8 @@ public class UserController {
     @GetMapping("/remove/{idUser}")
     public String remove(@PathVariable long idUser){
         User user = userService.findById(idUser);
-        if(!user.getCoches().isEmpty()){
-            user.getCoches().forEach(coche -> coche.setUser(null));
+        if(!user.getAlquileres().isEmpty()){
+            user.getAlquileres().forEach(alquiler -> alquiler.setUsuario(null));
         }
 
         if(userService.remove(idUser))

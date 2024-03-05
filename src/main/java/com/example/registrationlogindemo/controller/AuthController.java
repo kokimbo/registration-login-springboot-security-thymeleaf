@@ -1,9 +1,11 @@
 package com.example.registrationlogindemo.controller;
 
 import com.example.registrationlogindemo.dto.UserDto;
+import com.example.registrationlogindemo.entity.Alquiler;
 import com.example.registrationlogindemo.entity.Coche;
 import com.example.registrationlogindemo.entity.User;
 import com.example.registrationlogindemo.security.CustomUserDetails;
+import com.example.registrationlogindemo.service.AlquilerService;
 import com.example.registrationlogindemo.service.CocheService;
 import com.example.registrationlogindemo.service.UserService;
 import jakarta.servlet.http.HttpSession;
@@ -25,25 +27,27 @@ public class AuthController {
 
     private UserService userService;
     private CocheService cocheService;
+    private AlquilerService alquilerService;
     private CustomUserDetails userDetails;
 
-    public AuthController(UserService userService, CocheService cocheService) {
+    public AuthController(UserService userService, CocheService cocheService, AlquilerService alquilerService) {
         this.cocheService = cocheService;
         this.userService = userService;
+        this.alquilerService = alquilerService;
     }
 
     @RequestMapping("/")
     public String inicio(Model model, HttpSession session){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-
         // Acceder al nombre de usuario
+        //Probar en este if el metodo authentication.isAuthenticated(); para ver si se puede sustituir por esta mierda de condicion
         if(!authentication.getPrincipal().toString().equals("anonymousUser")){
             userDetails = (CustomUserDetails) authentication.getPrincipal();
         }
 
         if(userDetails!=null){
-            List<Coche> cochesUsuario = cocheService.getAllByUsuario(userService.findByEmail(userDetails.getEmail()));
+            List<Alquiler> cochesUsuario = alquilerService.getAllByUsuario(userService.findByEmail(userDetails.getEmail()));
             model.addAttribute("cochesUsuario", cochesUsuario);
         }
 

@@ -39,7 +39,6 @@ public class Coche {
     @NotNull(message = "El campo caballos no puede estar vacio")
     private Integer caballos;
 
-    @ManyToOne
-    @JoinColumn(name = "USER_ID", referencedColumnName = "ID")
-    private User user;
+    @OneToMany(mappedBy = "coche", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    private List<Alquiler> alquileres;
 }

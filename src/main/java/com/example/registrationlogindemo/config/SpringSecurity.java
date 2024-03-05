@@ -13,7 +13,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -40,7 +39,7 @@ public class SpringSecurity {
                                 .requestMatchers("/opcionesAdministrador").hasRole("ADMIN")
                                 .requestMatchers("/alquilar/**").hasRole("USER")
                                 .requestMatchers("/cancelarAlquiler/**").hasRole("USER")
-                                .requestMatchers("/remove/**").permitAll()
+                                .requestMatchers("/remove/**").hasAnyAuthority("USER", "ADMIN")
                                 .requestMatchers("/login/**").permitAll()
                 ).formLogin(
                         form -> form
