@@ -1,6 +1,7 @@
 package com.example.registrationlogindemo.entity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.Check;
 
 import java.util.Date;
 
@@ -36,4 +37,6 @@ public class Alquiler {
     @Column(nullable = false)
     private Double importe;
 
+    @Column(nullable = false)
+    private boolean estado;
 }

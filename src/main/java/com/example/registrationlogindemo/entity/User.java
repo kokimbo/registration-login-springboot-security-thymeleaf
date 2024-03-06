@@ -40,5 +40,5 @@ public class User
     private List<Role> roles = new ArrayList<>();
 
     @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Alquiler> alquileres;
+    private List<Alquiler> alquileres = new ArrayList<>();
 }

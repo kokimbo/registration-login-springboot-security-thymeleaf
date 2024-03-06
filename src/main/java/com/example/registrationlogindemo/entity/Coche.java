@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Setter
@@ -40,5 +41,5 @@ public class Coche {
     private Integer caballos;
 
     @OneToMany(mappedBy = "coche", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-    private List<Alquiler> alquileres;
+    private List<Alquiler> alquileres = new ArrayList<>();
 }

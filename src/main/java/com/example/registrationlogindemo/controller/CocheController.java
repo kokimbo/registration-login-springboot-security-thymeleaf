@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -30,10 +31,24 @@ public class CocheController {
     }
 
     @GetMapping("/alquilar")
-    public String alquilarCoche(@RequestParam("id") Long id, @RequestParam("idCoche") Long idCoche){
+    public String alquilarCoche(@RequestParam("id") Long id, @RequestParam("idCoche") Long idCoche, @RequestParam("cantidad") int cantidad){
+        Coche cocheSelect = cocheService.getById(idCoche);
+        User user = userService.findById(id);
+        long tiempoDespuesDeSumar = new Date().getTime() + (30L * 24 * 60 * 60 * 1000 * cantidad);
 
+        Alquiler alquiler = Alquiler.builder()
+                .coche(cocheSelect)
+                .usuario(user)
+                .fechaAlquiler(new Date())
+                .fechaDevolucion(new Date(tiempoDespuesDeSumar))   // new Date pero con los meses seleccionados sumados
+                .estado(true)
+                .importe(cantidad*cocheSelect.getAlquilerMensual())
+                .build();
 
-        if(true){
+        cocheSelect.getAlquileres().add(alquiler);
+        user.getAlquileres().add(alquiler);
+
+        if(alquilerService.insertUpdate(alquiler)){
             return "redirect:/";
         }else{
             return "redirect:/?errorAlquiler";

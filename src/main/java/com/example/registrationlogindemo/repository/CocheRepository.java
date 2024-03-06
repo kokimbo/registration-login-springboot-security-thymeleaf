@@ -8,5 +8,4 @@ import java.util.List;
 
 public interface CocheRepository extends JpaRepository<Coche, Long> {
     Coche findCocheById(Long id);
-
 }
