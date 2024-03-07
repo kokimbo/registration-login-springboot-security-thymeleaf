@@ -24,17 +24,17 @@ public class User
     @SequenceGenerator(name = "cliente_seq", sequenceName = "SEQ_CLIENTE_ID", allocationSize = 1)
     private Long id;
 
-    @NotEmpty(message = "El nombre no puede estar vacio")
     @Column(nullable=false)
+    @NotEmpty(message = "El nombre no puede estar vacio")
     private String name;
 
-//    @NotEmpty(message = "El email no puede estar vacio")
-//    @Email
     @Column(nullable=false, unique=true)
+    @Email
+    @NotEmpty(message = "El email no puede estar vacio")
     private String email;
 
-    @NotEmpty(message = "La contraseña no puede estar vacia")
     @Column(nullable=false)
+    @NotEmpty(message = "La contraseña no puede estar vacia")
     private String password;
 
 

@@ -14,7 +14,7 @@
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="#">Registration and Login System</a>
+        <a class="navbar-brand" href="#">Gestion de usuarios</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -49,7 +49,7 @@
             <td th:text="${user.getName()}"></td>
             <td th:text="${user.getEmail()}"></td>
             <td class="d-flex justify-content-evenly">
-                <a th:href="@{/remove/{id}(id=${#authentication.principal.userId})}" class="btn btn-outline-danger "><i class="fa-solid fa-trash"></i></a>
+                <a th:href="@{/removeByAdmin(id=${user.id})}" class="btn btn-outline-danger "><i class="fa-solid fa-trash"></i></a>
                 <a th:href="@{/modify(id=${user.id})}" class="btn btn-outline-primary "><i class="fa-solid fa-pen-to-square"></i></a>
             </td>
             <td th:if="${!user.getAlquileres().isEmpty()}">

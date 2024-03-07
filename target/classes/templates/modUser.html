@@ -21,6 +21,7 @@
         <form method="post" role="form" th:action="@{/modify}" th:object="${usuario}">
 
           <input type="hidden" th:value="${usuario.id}" th:field="*{id}">
+          <input type="hidden" th:value="${usuario.email}" th:field="*{email}">
           <div class="form-group mb-3">
             <label class="form-label">Nombre</label>
             <input class="form-control"

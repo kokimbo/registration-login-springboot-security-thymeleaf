@@ -50,16 +50,32 @@ public class UserController {
     }
 
     @PostMapping("/modify")
-    public String modificar(@Valid @ModelAttribute("usuario") User usuario, BindingResult result, Model model){
+    public String modificar(@Valid @ModelAttribute("usuario") User usuario, BindingResult result){
         User userDB = userService.findById(usuario.getId());
         usuario.setEmail(userDB.getEmail());
         userDB.setPassword(usuario.getPassword());
         userDB.setName(usuario.getName());
+
         if (result.hasErrors()) {
-            model.addAttribute("usuario", userService.findById(usuario.getId()));
-            return "modUser";
+            return "redirect:/modify?id="+usuario.getId();
         }
+
         userService.mergeUser(userDB);
+        return "redirect:/opcionesUsuarios";
+    }
+
+    @GetMapping("/removeByAdmin")
+    public String remove(@RequestParam("id") Long id){
+        User user = userService.findById(id);
+        if(!user.getAlquileres().isEmpty()){
+            user.getAlquileres().forEach(alquiler ->{
+                alquiler.setUsuario(null);
+                alquiler.setEstado("NO ALQUILADO");
+                alquilerService.insertUpdate(alquiler);
+            });
+        }
+        user.getAlquileres().clear();
+        userService.remove(id);
         return "redirect:/opcionesUsuarios";
     }
 }
