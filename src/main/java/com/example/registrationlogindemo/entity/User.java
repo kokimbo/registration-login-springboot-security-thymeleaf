@@ -1,6 +1,8 @@
 package com.example.registrationlogindemo.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -22,12 +24,16 @@ public class User
     @SequenceGenerator(name = "cliente_seq", sequenceName = "SEQ_CLIENTE_ID", allocationSize = 1)
     private Long id;
 
+    @NotEmpty(message = "El nombre no puede estar vacio")
     @Column(nullable=false)
     private String name;
 
+//    @NotEmpty(message = "El email no puede estar vacio")
+//    @Email
     @Column(nullable=false, unique=true)
     private String email;
 
+    @NotEmpty(message = "La contraseña no puede estar vacia")
     @Column(nullable=false)
     private String password;
 
@@ -39,6 +45,6 @@ public class User
             inverseJoinColumns={@JoinColumn(name="ROLE_ID", referencedColumnName="ID")})
     private List<Role> roles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER)
     private List<Alquiler> alquileres = new ArrayList<>();
 }

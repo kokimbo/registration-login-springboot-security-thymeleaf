@@ -40,6 +40,6 @@ public class Coche {
     @NotNull(message = "El campo caballos no puede estar vacio")
     private Integer caballos;
 
-    @OneToMany(mappedBy = "coche", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @OneToMany(mappedBy = "coche", fetch = FetchType.EAGER)
     private List<Alquiler> alquileres = new ArrayList<>();
 }

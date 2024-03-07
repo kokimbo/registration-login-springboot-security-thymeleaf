@@ -38,5 +38,5 @@ public class Alquiler {
     private Double importe;
 
     @Column(nullable = false)
-    private boolean estado;
+    private String estado;
 }

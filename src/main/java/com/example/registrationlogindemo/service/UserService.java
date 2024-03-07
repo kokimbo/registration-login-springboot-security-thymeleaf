@@ -7,11 +7,13 @@ import java.util.List;
 
 public interface UserService {
     void saveUser(UserDto userDto);
+    void mergeUser(User user);
 
     User findByEmail(String email);
     User findById(Long id);
 
     List<UserDto> findAllUsers();
+    List<User> findAll();
 
     boolean remove(Long id);
 

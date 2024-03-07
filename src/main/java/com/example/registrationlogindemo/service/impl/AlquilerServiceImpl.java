@@ -28,8 +28,8 @@ public class AlquilerServiceImpl implements AlquilerService {
     }
 
     @Override
-    public boolean remove(Long id) {
-        alquilerRepository.deleteById(id);
+    public boolean remove(Alquiler alquiler) {
+        alquilerRepository.delete(alquiler);
         return true;
     }
 
@@ -37,5 +37,10 @@ public class AlquilerServiceImpl implements AlquilerService {
     public boolean insertUpdate(Alquiler alquiler) {
         alquilerRepository.saveAndFlush(alquiler);
         return true;
+    }
+
+    @Override
+    public Alquiler getById(Long id) {
+        return alquilerRepository.findById(id).get();
     }
 }

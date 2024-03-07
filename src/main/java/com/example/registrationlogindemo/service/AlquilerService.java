@@ -10,7 +10,8 @@ public interface AlquilerService {
     List<Alquiler> getAllByCoche(Coche coche);
     List<Alquiler> getAllByUsuario(User user);
 
-    boolean remove(Long id);
+    boolean remove(Alquiler alquiler);
     boolean insertUpdate(Alquiler alquiler);
+    Alquiler getById(Long id);
 
 }

@@ -43,6 +43,16 @@
         <h3 class="fw-bold mb-0">No se ha podido alquilar este coche</h3>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     </div>
+    <div th:if="${param.cancelar}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <h3 class="fw-bold mb-0">Se ha cancelado el alquiler correctamente del coche <th:block th:text="${param.cancelar}"></th:block></h3>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <div th:if="${param.pagado}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <h3 class="fw-bold mb-0">Se ha pagado correctamente todo el alquiler de <th:block th:text="${param.pagado}"></th:block> </h3>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+
+
     <div class="mt-5 fw-bold" sec:authorize="hasRole('ROLE_USER')">
         <h1>Hola <span th:text="${#authentication.principal.username}"></span></h1>
     </div>
@@ -71,9 +81,9 @@
             <td th:text="${coche.alquilerMensual}"></td>
             <td th:text="${coche.kilometros}"></td>
             <td th:text="${coche.caballos}"></td>
-            <td class="text-center" th:if="${#lists.contains(coche.alquileres.![estado], true)}" th:text="${coche.alquileres.?[estado][0].usuario.name}"></td>
+            <td class="text-center" th:if="${#lists.contains(coche.alquileres.![estado], 'ALQUILADO')}" th:text="${coche.alquileres.?[estado == 'ALQUILADO'][0]?.usuario?.name}"></td>
 
-            <td class="text-center" th:if="${!#lists.contains(coche.alquileres.![estado], true)}">
+            <td class="text-center" sec:authorize="isAnonymous()" th:if="${#lists.contains(coche.alquileres.![estado], 'NO ALQUILADO')  or #lists.isEmpty(coche.alquileres) or #lists.contains(coche.alquileres.![estado], 'PAGADO') and !#lists.contains(coche.alquileres.![estado], 'ALQUILADO')}">
                 <a class="btn btn-outline-success" th:href="@{/login?alquilar=0}" sec:authorize="!isAuthenticated()">Alquilar</a>
                 <form sec:authorize="hasRole('ROLE_USER')" th:action="@{/alquilar}" method="get">
                     <input type="hidden" id="inputCTD" value="1" name="cantidad"/>
@@ -83,7 +93,23 @@
                 </form>
 
             </td>
-            <td class="d-flex flex-row justify-content-center" th:if="${!#lists.contains(coche.alquileres.![estado], true)}">
+
+            <td class="text-center" sec:authorize="hasRole('USER')" th:if="${#lists.contains(coche.alquileres.![estado], 'NO ALQUILADO')  or #lists.isEmpty(coche.alquileres) or #lists.contains(coche.alquileres.![estado], 'PAGADO') and !(#lists.contains(coche.alquileres.![estado], 'PAGADO') and #lists.contains(coche.alquileres.![estado], 'ALQUILADO'))}">
+                <form sec:authorize="hasRole('ROLE_USER')" th:action="@{/alquilar}" method="get">
+                    <input type="hidden" id="inputCTD" value="1" name="cantidad"/>
+                    <input type="hidden" name="id" th:value="${#authentication.principal.userId}"/>
+                    <input type="hidden" name="idCoche" th:value="${coche.getId()}"/>
+                    <button type="submit" class="btn btn-outline-success alquilar">Alquilar</button>
+                </form>
+
+            </td>
+            <td class="d-flex flex-row justify-content-center" sec:authorize="isAnonymous()" th:if="${#lists.contains(coche.alquileres.![estado], 'NO ALQUILADO')  or #lists.isEmpty(coche.alquileres) or #lists.contains(coche.alquileres.![estado], 'PAGADO') and !#lists.contains(coche.alquileres.![estado], 'ALQUILADO')}">
+                <button type="button" class="btn btn-danger me-2 restar"><i class="fa-solid fa-minus m-0" ></i></button>
+                <div><h3 class="fw-bold ctd">1</h3></div>
+                <button type="button" class="btn btn-success ms-2 sumar" ><i class="fa-solid fa-plus m-0"></i></button>
+            </td>
+
+            <td class="d-flex flex-row justify-content-center" sec:authorize="hasRole('USER')" th:if="${#lists.contains(coche.alquileres.![estado], 'NO ALQUILADO')  or #lists.isEmpty(coche.alquileres) or #lists.contains(coche.alquileres.![estado], 'PAGADO') and !(#lists.contains(coche.alquileres.![estado], 'PAGADO') and #lists.contains(coche.alquileres.![estado], 'ALQUILADO'))}">
                 <button type="button" class="btn btn-danger me-2 restar"><i class="fa-solid fa-minus m-0" ></i></button>
                 <div><h3 class="fw-bold ctd">1</h3></div>
                 <button type="button" class="btn btn-success ms-2 sumar" ><i class="fa-solid fa-plus m-0"></i></button>
@@ -111,9 +137,16 @@
                     </div>
 
                     <div class="row">
-                        <p class="card-text col-11 d-inline border-bottom pb-1" th:text="'Caballos de potencia: '+${coche.getCoche().getCaballos()}"></p>
-                        <div class="col-1 ">
-                            <a sec:authorize="hasRole('ROLE_USER')" th:href="@{/cancelarAlquiler(id=${#authentication.principal.userId}, idCoche=${coche.getId()})}" class="btn btn-outline-danger ms-5"><i class="fa-solid fa-trash"></i></a>
+                        <p class="card-text col-11 d-inline border-bottom pb-1 text-start" th:with="arrayFecha=${coche.getFechaAlquiler().toLocaleString().split(' ')}, arrayFechaDev=${coche.getFechaDevolucion().toLocaleString().split(' ')}">
+                            <span class="me-5" th:text="'Caballos de potencia: '+${coche.getCoche().getCaballos()}"></span>
+                            <span class="me-5" th:text="'Importe total: '+${coche.getImporte()}"></span>
+                            <span class="me-5" th:text="'Alquilado en: '+${arrayFecha[0]}+' '+${arrayFecha[1]}+' '+${arrayFecha[2]}"></span>
+                            <span class="me-5" th:text="'Alquiler hasta: '+${arrayFechaDev[0]}+' '+${arrayFechaDev[1]}+' '+${arrayFechaDev[2]}"></span>
+                            <span class="me-5 badge bg-success text-white" th:if="${coche.getEstado()=='PAGADO'}">Pagado</span>
+                        </p>
+                        <div class="col-1" th:if="${coche.getEstado()=='ALQUILADO'}">
+                            <a sec:authorize="hasRole('ROLE_USER')" th:href="@{/cancelarAlquiler(idAlquiler=${coche.getId()})}" class="btn btn-outline-danger ms-5"><i class="fa-solid fa-trash"></i></a>
+                            <a sec:authorize="hasRole('ROLE_USER')" th:href="@{/pagarAlquiler(idAlquiler=${coche.getId()})}" class="btn btn-outline-success ms-5"><i class="fa-solid fa-square-check"></i></a>
                         </div>                                   <!--Cambiar el href-->
                     </div>
                 </div>

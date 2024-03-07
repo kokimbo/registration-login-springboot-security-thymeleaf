@@ -37,7 +37,7 @@ public class AuthController {
     }
 
     @RequestMapping("/")
-    public String inicio(Model model, HttpSession session){
+    public String inicio(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         // Acceder al nombre de usuario
@@ -58,13 +58,10 @@ public class AuthController {
 
 //    @GetMapping("/error")
 //    public String errorHandling() {
-//        return "redirect:/login";
+//        return "error";
 //    }
 
-//    @GetMapping("/otra-pagina-de-error")
-//    public String errorDelError() {
-//        return "opcionesAdmin";
-//    }
+
 
     @GetMapping("/login")
     public String loginForm() {
@@ -96,12 +93,6 @@ public class AuthController {
         return "redirect:/login?success";
     }
 
-    @GetMapping("/users")
-    public String listRegisteredUsers(Model model){
-        List<UserDto> users = userService.findAllUsers();
-        model.addAttribute("users", users);
-        return "users";
-    }
 
     @GetMapping("/opcionesAdministrador")
     public String opcionesDeAdmin(){

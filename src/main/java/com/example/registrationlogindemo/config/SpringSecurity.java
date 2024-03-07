@@ -35,11 +35,14 @@ public class SpringSecurity {
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/").permitAll()
-                                .requestMatchers("/users").hasRole("ADMIN")
                                 .requestMatchers("/opcionesAdministrador").hasRole("ADMIN")
+                                .requestMatchers("/opcionesUsuarios/**").hasRole("ADMIN")
+                                .requestMatchers("/modify/**").hasRole("ADMIN")
+                                .requestMatchers("/opcionesCoches/**").hasRole("ADMIN")
                                 .requestMatchers("/alquilar/**").hasRole("USER")
                                 .requestMatchers("/cancelarAlquiler/**").hasRole("USER")
-                                .requestMatchers("/remove/**").hasAnyAuthority("USER", "ADMIN")
+                                .requestMatchers("/pagarAlquiler/**").hasRole("USER")
+                                .requestMatchers("/remove/**").authenticated()
                                 .requestMatchers("/login/**").permitAll()
                 ).formLogin(
                         form -> form

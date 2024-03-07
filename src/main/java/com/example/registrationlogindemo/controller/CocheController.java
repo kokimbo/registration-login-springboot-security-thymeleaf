@@ -41,7 +41,7 @@ public class CocheController {
                 .usuario(user)
                 .fechaAlquiler(new Date())
                 .fechaDevolucion(new Date(tiempoDespuesDeSumar))   // new Date pero con los meses seleccionados sumados
-                .estado(true)
+                .estado("ALQUILADO")
                 .importe(cantidad*cocheSelect.getAlquilerMensual())
                 .build();
 
@@ -57,10 +57,21 @@ public class CocheController {
 
 
     @GetMapping("/cancelarAlquiler")
-    public String cancelarAlquiler(@RequestParam("id") Long id, @RequestParam("idCoche") Long idCoche){
+    public String cancelarAlquiler(@RequestParam("idAlquiler") Long idAlquiler){
+        Alquiler alquiler = alquilerService.getById(idAlquiler);
+        if(alquilerService.remove(alquiler)){
+            return "redirect:/?cancelar="+alquiler.getCoche().getNombre();
+        }else{
+            return "redirect:/?errorAlquiler";
+        }
+    }
 
-        if(true){
-            return "redirect:/";
+    @GetMapping("/pagarAlquiler")
+    public String pagarAlquiler(@RequestParam("idAlquiler") Long idAlquiler){
+        Alquiler alquiler = alquilerService.getById(idAlquiler);
+        alquiler.setEstado("PAGADO");
+        if(alquilerService.insertUpdate(alquiler)){
+            return "redirect:/?pagado="+alquiler.getImporte();
         }else{
             return "redirect:/?errorAlquiler";
         }
