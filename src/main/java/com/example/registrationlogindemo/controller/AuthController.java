@@ -39,9 +39,9 @@ public class AuthController {
     @RequestMapping("/")
     public String inicio(Model model){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         // Acceder al nombre de usuario
         //Probar en este if el metodo authentication.isAuthenticated(); para ver si se puede sustituir por esta mierda de condicion
+        //Y efectivamente se puede, pero lo voy a dejar asi
         if(!authentication.getPrincipal().toString().equals("anonymousUser")){
             userDetails = (CustomUserDetails) authentication.getPrincipal();
         }
@@ -68,7 +68,6 @@ public class AuthController {
         return "login";
     }
 
-    // handler method to handle user registration request
     @GetMapping("register")
     public String showRegistrationForm(Model model){
         UserDto user = new UserDto();
@@ -76,7 +75,6 @@ public class AuthController {
         return "register";
     }
 
-    // handler method to handle register user form submit request
     @PostMapping("/register/saveUser")
     public String registration(@Valid @ModelAttribute("user") UserDto user,
                                BindingResult result,

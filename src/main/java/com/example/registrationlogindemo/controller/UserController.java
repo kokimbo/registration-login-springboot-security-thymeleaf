@@ -29,7 +29,7 @@ public class UserController {
         if(!user.getAlquileres().isEmpty()){
             user.getAlquileres().forEach(alquiler ->{
                 alquiler.setUsuario(null);
-                alquiler.setEstado("NO ALQUILADO");
+                alquiler.setEstado("PAGADO");
                 alquilerService.insertUpdate(alquiler);
             });
         }

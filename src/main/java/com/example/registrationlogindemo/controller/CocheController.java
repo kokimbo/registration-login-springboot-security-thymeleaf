@@ -97,7 +97,7 @@ public class CocheController {
             coche.getAlquileres().forEach(alquiler ->{
                 alquiler.setCoche(null);
                 //Realmente daria igual en que estado se encontraria el alquiler porque el coche seria retirado
-                alquiler.setEstado("NO ALQUILADO");
+                alquiler.setEstado("PAGADO");
                 alquilerService.insertUpdate(alquiler);
             });
         }

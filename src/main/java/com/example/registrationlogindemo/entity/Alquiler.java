@@ -2,6 +2,7 @@ package com.example.registrationlogindemo.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.Check;
+import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
@@ -10,6 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Component
 @Builder
 @Table(name = "alquileres")
 public class Alquiler {

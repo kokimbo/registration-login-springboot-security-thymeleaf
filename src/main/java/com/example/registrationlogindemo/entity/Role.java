@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Builder
+@Component
 @Table(name="roles")
 @EqualsAndHashCode(exclude = "roles")
 public class Role
