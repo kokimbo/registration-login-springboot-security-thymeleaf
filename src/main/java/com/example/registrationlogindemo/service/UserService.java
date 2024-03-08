@@ -7,6 +7,7 @@ import java.util.List;
 
 public interface UserService {
     void saveUser(UserDto userDto);
+    void saveUserAdmin(User user);
     void mergeUser(User user);
 
     User findByEmail(String email);

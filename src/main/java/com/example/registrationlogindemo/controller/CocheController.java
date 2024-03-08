@@ -24,6 +24,9 @@ public class CocheController {
     private final AlquilerService alquilerService;
     private final UserService userService;
 
+    @Autowired
+    private Coche coche;
+
     public CocheController(CocheService cocheService, UserService userService, AlquilerService alquilerService) {
         this.cocheService = cocheService;
         this.userService = userService;
@@ -76,4 +79,49 @@ public class CocheController {
             return "redirect:/?errorAlquiler";
         }
     }
+
+    @GetMapping("/opcionesCoches")
+    public String opcionCoche(Model model, @RequestParam(name = "id", required = false) Long idCoche){
+        if (idCoche!=null){
+            Coche coche = cocheService.getById(idCoche);
+            model.addAttribute("alquilerCoches", coche.getAlquileres());
+        }
+        model.addAttribute("coches", cocheService.getAll());
+        return "opcionCoches";
+    }
+
+    @GetMapping("/removeCoche")
+    public String removeCoche(@RequestParam("id") Long id){
+        Coche coche = cocheService.getById(id);
+        if(!coche.getAlquileres().isEmpty()){
+            coche.getAlquileres().forEach(alquiler ->{
+                alquiler.setCoche(null);
+                //Realmente daria igual en que estado se encontraria el alquiler porque el coche seria retirado
+                alquiler.setEstado("NO ALQUILADO");
+                alquilerService.insertUpdate(alquiler);
+            });
+        }
+        coche.getAlquileres().clear();
+        cocheService.remove(id);
+        return "redirect:/opcionesCoches";
+    }
+
+
+    @GetMapping("/addCocheAdmin")
+    public String addCoche(Model model){
+        model.addAttribute("coche", coche);
+        return "addCoche";
+    }
+
+    @PostMapping("/addCocheAdmin")
+    public String addAdminPost(@Valid @ModelAttribute("coche") Coche coche,
+                               BindingResult result, Model model){
+        if (result.hasErrors()) {
+            model.addAttribute("coche", coche);
+            return "addCoche";
+        }
+        cocheService.saveUpdateCoche(coche);
+        return "redirect:/opcionesCoches?success";
+    }
+
 }

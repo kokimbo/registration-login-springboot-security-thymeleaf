@@ -39,7 +39,19 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         Role role = roleRepository.findByName("ROLE_USER");
         if(role == null){
-            role = checkRoleExist();
+            role = checkRoleExist("ROLE_USER");
+        }
+        user.setRoles(Arrays.asList(role));
+        userRepository.save(user);
+    }
+
+    @Override
+    public void saveUserAdmin(User user) {
+        String passwordEncoded = passwordEncoder.encode(user.getPassword());
+        user.setPassword(passwordEncoded);
+        Role role = roleRepository.findByName("ROLE_ADMIN");
+        if(role == null){
+            role = checkRoleExist("ROLE_ADMIN");
         }
         user.setRoles(Arrays.asList(role));
         userRepository.save(user);
@@ -93,8 +105,8 @@ public class UserServiceImpl implements UserService {
         return userDto;
     }
 
-    private Role checkRoleExist() {
-        Role role = Role.builder().name("ROLE_USER").build();
+    private Role checkRoleExist(String newRole) {
+        Role role = Role.builder().name(newRole).build();
         return roleRepository.save(role);
     }
 }

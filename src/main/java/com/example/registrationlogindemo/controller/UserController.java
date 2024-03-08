@@ -5,6 +5,7 @@ import com.example.registrationlogindemo.entity.User;
 import com.example.registrationlogindemo.service.AlquilerService;
 import com.example.registrationlogindemo.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class UserController {
     private UserService userService;
+    @Autowired
+    private User user;
     private AlquilerService alquilerService;
 
     public UserController(UserService userService, AlquilerService alquilerService) {
@@ -77,5 +80,26 @@ public class UserController {
         user.getAlquileres().clear();
         userService.remove(id);
         return "redirect:/opcionesUsuarios";
+    }
+
+    @GetMapping("/addAdmin")
+    public String addAdmin(Model model){
+        model.addAttribute("user", user);
+        return "addAdministrador";
+    }
+
+    @PostMapping("/addAdmin")
+    public String addAdminPost(@Valid @ModelAttribute("user") User user,
+                               BindingResult result, Model model){
+        User existing = userService.findByEmail(user.getEmail());
+        if (existing != null) {
+            result.rejectValue("email", null, "Este email ya esta resgistrado, inicie sesion");
+        }
+        if (result.hasErrors()) {
+            model.addAttribute("user", user);
+            return "addAdministrador";
+        }
+        userService.saveUserAdmin(user);
+        return "redirect:/opcionesUsuarios?success";
     }
 }

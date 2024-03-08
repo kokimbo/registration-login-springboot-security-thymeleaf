@@ -4,7 +4,7 @@
 >
 <head>
     <meta charset="UTF-8">
-    <title>Registration and Login System</title>
+    <title>Gestion usuarios</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
@@ -21,7 +21,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" th:href="@{/register}">Registrar admin</a>
+                    <a class="nav-link active" aria-current="page" th:href="@{/register}">Registrar</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" th:href="@{/logout}">Cerrar Sesion</a>
@@ -34,6 +34,10 @@
     <div class="row">
         <h1> Usuarios Registrados </h1>
     </div>
+    <div th:if="${param.success}" class="alert alert-success alert-dismissible fade show" role="alert">
+        <h3 class="fw-bold mb-0">¡Has registrado un nuevo admin correctamente!</h3>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
     <table class="table table-striped table-bordered table-hover">
         <thead class="table-dark">
         <tr>
@@ -45,7 +49,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user: ${users}">
+        <tr th:if="${user.id!=#authentication.principal.userId}" th:each="user: ${users}">
             <td th:text="${user.getId()}"></td>
             <td th:text="${user.getName()}"></td>
             <td th:text="${user.getEmail()}"></td>
@@ -59,27 +63,29 @@
             <div class="collapse" id="collapseExample" th:each="coche : ${user.getAlquileres()}">
                 <div class="card my-4">
                     <div class="card card-header">
-                        <h5 class="fw-bold mb-0" th:text="'Nombre: '+${coche.getCoche().getNombre()}"></h5>
+                        <h5 class="fw-bold mb-0" th:if="${coche.getCoche()!=null}" th:text="'Nombre: '+${coche.getCoche().getNombre()}"></h5>
                     </div>
                     <div class="card card-body">
                         <div class="row">
                             <div class="col-4 d-flex">
-                                <h6 class="text-lighter me-4 mb-3" th:text="'Marca: '+${coche.getCoche().getMarca()}"></h6>
-                                <h6 class="fw-light" th:text="'Kilometros recorridos: '+${coche.getCoche().getKilometros()}"></h6>
+                                <h6 class="text-lighter me-4 mb-3" th:if="${coche.getCoche()!=null}" th:text="'Marca: '+${coche.getCoche().getMarca()}"></h6>
+                                <h6 class="fw-light" th:if="${coche.getCoche()!=null}" th:text="'Kilometros recorridos: '+${coche.getCoche().getKilometros()}"></h6>
                             </div>
                             <div class="col-8 d-flex justify-content-end">
-                                <h6 class="fw-light" th:text="'Alquiler/mes €: '+${coche.getCoche().getAlquilerMensual()}+'€'"></h6>
+                                <h6 class="fw-light" th:if="${coche.getCoche()!=null}" th:text="'Alquiler/mes €: '+${coche.getCoche().getAlquilerMensual()}+'€'"></h6>
                             </div>
                         </div>
 
                         <div class="row">
-                            <p class="card-text col-10 d-inline border-bottom pb-1 text-start" th:with="arrayFecha=${coche.getFechaAlquiler().toLocaleString().split(' ')}, arrayFechaDev=${coche.getFechaDevolucion().toLocaleString().split(' ')}">
+                            <p class="card-text col-10 d-inline border-bottom pb-1 text-start" th:if="${coche.getCoche()!=null}" th:with="arrayFecha=${coche.getFechaAlquiler().toLocaleString().split(' ')}, arrayFechaDev=${coche.getFechaDevolucion().toLocaleString().split(' ')}">
                                 <span class="me-5" th:text="'Caballos de potencia: '+${coche.getCoche().getCaballos()}"></span>
                                 <span class="me-5" th:text="'Importe total: '+${coche.getImporte()}"></span>
                                 <span class="me-5" th:text="'Alquilado en: '+${arrayFecha[0]}+' '+${arrayFecha[1]}+' '+${arrayFecha[2]}"></span>
                                 <span class="me-5" th:text="'Alquiler hasta: '+${arrayFechaDev[0]}+' '+${arrayFechaDev[1]}+' '+${arrayFechaDev[2]}"></span>
                                 <span class="me-5 badge bg-success text-white" th:if="${coche.getEstado()=='PAGADO'}">Pagado</span>
                             </p>
+                            <p th:if="${coche.getCoche()==null}" th:text="'Importe total: '+${coche.getImporte()}"></p>
+                            <h6 class="fw-bold text-danger" th:if="${coche.getCoche()==null}" >Coche descatalogado</h6>
                             <div class="col-2">
                                 <p class="fw-bold" th:text="'Dueño: xº'+${coche.getUsuario().getName()}"></p>
                             </div>
@@ -90,6 +96,9 @@
         </tr>
         </tbody>
     </table>
+    <div class="w-100">
+        <a class="btn btn-outline-primary" th:href="@{/addAdmin}">Registrar admin</a>
+    </div>
 </div>
 <div>
 
